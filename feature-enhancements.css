@@ -34,7 +34,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-left: 12px;
+  margin-left: 0;
+  white-space: nowrap;
 }
 
 .array-size-input {
@@ -64,7 +65,12 @@
 
 @media (max-width: 900px) {
   .feature-info-grid { grid-template-columns: 1fr; }
-  .array-size-input-wrap { margin: 10px 0 0; }
+  .view__size-control {
+    flex-wrap: wrap;
+    row-gap: 10px;
+    max-width: 100%;
+  }
+  .array-size-input-wrap { margin: 0; }
 }
 
 .sidebar__mark {

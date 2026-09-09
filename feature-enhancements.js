@@ -186,6 +186,9 @@ function setupArraySizeInput() {
     input.max = range.max || '100';
     input.value = range.value;
     input.setAttribute('aria-label', label);
+    range.addEventListener('input', () => {
+      if (document.activeElement !== input) input.value = range.value;
+    });
     input.addEventListener('change', () => {
       const value = Math.max(Number(input.min), Math.min(Number(input.max), Number(input.value)));
       if (!Number.isInteger(value)) {
@@ -200,6 +203,22 @@ function setupArraySizeInput() {
     wrap.appendChild(input);
     parent?.appendChild(wrap);
   });
+}
+
+function setupMobileNavigation() {
+  if (document.body.dataset.mobileNavigationReady === 'true') return;
+  document.body.dataset.mobileNavigationReady = 'true';
+  document.addEventListener('click', (event) => {
+    const target = event.target instanceof Element ? event.target : null;
+    if (!target?.closest('.sidebar button')) return;
+    window.setTimeout(() => {
+      const sidebar = document.querySelector('.sidebar');
+      const scrim = document.querySelector('.sidebar-scrim');
+      if (window.innerWidth <= 800 && scrim && sidebar?.getBoundingClientRect().left >= -1) {
+        scrim.click();
+      }
+    }, 0);
+  }, true);
 }
 
 function watchExistingErrors() {
@@ -267,6 +286,7 @@ window.addEventListener('DOMContentLoaded', () => {
   applySpitBranding();
   renderAlgorithmInfo();
   setupArraySizeInput();
+  setupMobileNavigation();
   setupInteractionPrompts();
   observer.observe(document.body, { childList: true, subtree: true });
 });
