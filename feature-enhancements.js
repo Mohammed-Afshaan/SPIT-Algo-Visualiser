@@ -164,34 +164,42 @@ function renderAlgorithmInfo() {
   header.insertAdjacentElement('afterend', grid);
 }
 
+function setControlledInputValue(input, value) {
+  const setter = Object.getOwnPropertyDescriptor(input.constructor.prototype, 'value')?.set;
+  setter?.call(input, String(value));
+}
+
 function setupArraySizeInput() {
-  const range = document.querySelector('.view__size-control input[type="range"]');
-  if (!range || range.dataset.textInputReady === 'true') return;
-  range.dataset.textInputReady = 'true';
-  const parent = range.closest('.view__size-control') || range.parentElement;
-  const wrap = document.createElement('label');
-  wrap.className = 'array-size-input-wrap';
-  wrap.textContent = 'Type size';
-  const input = document.createElement('input');
-  input.className = 'array-size-input';
-  input.type = 'number';
-  input.min = range.min || '2';
-  input.max = range.max || '100';
-  input.value = range.value;
-  input.setAttribute('aria-label', 'Array size');
-  input.addEventListener('change', () => {
-    const value = Math.max(Number(input.min), Math.min(Number(input.max), Number(input.value)));
-    if (!Number.isInteger(value)) {
-      showError('Array size must be a whole number.');
-      return;
-    }
-    input.value = value;
-    range.value = value;
-    range.dispatchEvent(new Event('input', { bubbles: true }));
-    range.dispatchEvent(new Event('change', { bubbles: true }));
+  const ranges = document.querySelectorAll('.view__size-control input[type="range"]');
+  ranges.forEach((range, index) => {
+    if (range.dataset.textInputReady === 'true') return;
+    range.dataset.textInputReady = 'true';
+    const parent = range.closest('.view__size-control') || range.parentElement;
+    const label = ranges.length > 1 ? `${index === 0 ? 'Rows' : 'Cols'} size` : 'Type size';
+    const wrap = document.createElement('label');
+    wrap.className = 'array-size-input-wrap';
+    wrap.textContent = label;
+    const input = document.createElement('input');
+    input.className = 'array-size-input';
+    input.type = 'number';
+    input.min = range.min || '2';
+    input.max = range.max || '100';
+    input.value = range.value;
+    input.setAttribute('aria-label', label);
+    input.addEventListener('change', () => {
+      const value = Math.max(Number(input.min), Math.min(Number(input.max), Number(input.value)));
+      if (!Number.isInteger(value)) {
+        showError('Size must be a whole number.');
+        return;
+      }
+      input.value = value;
+      setControlledInputValue(range, value);
+      range.dispatchEvent(new Event('input', { bubbles: true }));
+      range.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    wrap.appendChild(input);
+    parent?.appendChild(wrap);
   });
-  wrap.appendChild(input);
-  parent?.appendChild(wrap);
 }
 
 function watchExistingErrors() {
