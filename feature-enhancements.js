@@ -101,7 +101,7 @@ function applySpitLogo() {
   if (!mark || mark.dataset.spitLogoReady === 'true') return;
   mark.dataset.spitLogoReady = 'true';
   if (mark instanceof HTMLImageElement) {
-    mark.src = '/spit_logo.png';
+    mark.src = './spit_logo.png';
     mark.alt = 'Sardar Patel Institute of Technology logo';
     mark.classList.add('spit-logo');
     mark.width = 42;
@@ -109,7 +109,7 @@ function applySpitLogo() {
     return;
   }
   const logo = document.createElement('img');
-  logo.src = '/spit_logo.png';
+  logo.src = './spit_logo.png';
   logo.alt = 'Sardar Patel Institute of Technology logo';
   logo.className = 'spit-logo';
   logo.width = 42;
