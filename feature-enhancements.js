@@ -120,17 +120,23 @@ function applySpitLogo() {
 function applySpitBranding() {
   document.title = 'SPIT Algo Visualizer';
   const title = document.querySelector('.sidebar__title');
-  if (title) title.textContent = 'SPIT Algo Visualizer';
+  if (title && title.textContent !== 'SPIT Algo Visualizer') title.textContent = 'SPIT Algo Visualizer';
 
   const subtitle = document.querySelector('.sidebar__subtitle');
-  if (subtitle) subtitle.textContent = 'Interactive algorithm laboratory';
+  if (subtitle && subtitle.textContent !== 'Interactive algorithm laboratory') {
+    subtitle.textContent = 'Interactive algorithm laboratory';
+  }
 
   const note = document.querySelector('.sidebar__note');
-  if (note) note.textContent = 'Understand the pattern. Master the logic.';
+  if (note && note.textContent !== 'Understand the pattern. Master the logic.') {
+    note.textContent = 'Understand the pattern. Master the logic.';
+  }
 
   const topbar = document.querySelector('.app__topbar');
   const topbarLabel = topbar?.querySelector(':scope > div:last-child, :scope > span:last-child');
-  if (topbarLabel && !topbarLabel.querySelector('button')) topbarLabel.textContent = 'SPIT Algo Visualizer';
+  if (topbarLabel && !topbarLabel.querySelector('button') && topbarLabel.textContent !== 'SPIT Algo Visualizer') {
+    topbarLabel.textContent = 'SPIT Algo Visualizer';
+  }
 }
 
 function renderAlgorithmInfo() {
@@ -254,5 +260,5 @@ window.addEventListener('DOMContentLoaded', () => {
   renderAlgorithmInfo();
   setupArraySizeInput();
   setupInteractionPrompts();
-  observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+  observer.observe(document.body, { childList: true, subtree: true });
 });
